@@ -71,6 +71,14 @@
         </dependency>
 
         <dependency>
+            <groupId>org.tg.auth</groupId>
+            <artifactId>telegram-auth</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/TelegramDataValidation.jar</systemPath>
+        </dependency>
+
+        <dependency>
             <groupId>org.zalando</groupId>
             <artifactId>logbook-spring-boot-starter</artifactId>
             <version>${logbook.version}</version>
