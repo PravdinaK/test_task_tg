@@ -1,0 +1,28 @@
+body {
+    background-color: #f3f4f6;
+    font-family: sans-serif;
+    padding: 2rem;
+}
+
+.container {
+    max-width: 480px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+p {
+    margin: 0.5rem 0;
+}
+
+strong {
+    font-weight: 600;
+}
