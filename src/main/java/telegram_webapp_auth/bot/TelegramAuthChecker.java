@@ -1,9 +1,11 @@
-package test_task.bot;
+package telegram_webapp_auth.bot;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.tg.auth.TelegramAuth;
+import telegram_webapp_auth.exception.TelegramInitDataParseException;
+import telegram_webapp_auth.exception.TelegramSignatureVerificationException;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -26,8 +28,7 @@ public class TelegramAuthChecker {
             }
             return valid;
         } catch (Exception e) {
-            log.error("Ошибка при проверке подписи Telegram WebApp", e);
-            throw new RuntimeException("Ошибка при проверке подписи Telegram WebApp", e);
+            throw new TelegramSignatureVerificationException(e);
         }
     }
 
@@ -35,8 +36,7 @@ public class TelegramAuthChecker {
         try {
             return parseQueryString(initDataRaw);
         } catch (Exception e) {
-            log.error("Ошибка при парсинге initData", e);
-            throw new RuntimeException("Не удалось распарсить initData", e);
+            throw new TelegramInitDataParseException(e);
         }
     }
 

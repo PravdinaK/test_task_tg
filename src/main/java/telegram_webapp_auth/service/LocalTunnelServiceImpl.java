@@ -1,9 +1,10 @@
-package test_task.service;
+package telegram_webapp_auth.service;
 
 import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import telegram_webapp_auth.exception.LocalTunnelStartException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -72,7 +73,6 @@ public class LocalTunnelServiceImpl implements LocalTunnelService {
             if (env.get("PATH") == null) {
                 env.put("PATH", System.getenv("PATH"));
             }
-            log.info("Process environment PATH: {}", env.get("PATH"));
 
             localTunnelProcess = processBuilder.start();
             running.set(true);
@@ -88,7 +88,7 @@ public class LocalTunnelServiceImpl implements LocalTunnelService {
                         }
                     }
                 } catch (IOException e) {
-                    log.error("Ошибка чтения вывода LocalTunnel: {}", e.getMessage());
+                    throw new LocalTunnelStartException(e);
                 }
             });
 
@@ -96,8 +96,7 @@ public class LocalTunnelServiceImpl implements LocalTunnelService {
 
         } catch (IOException e) {
             running.set(false);
-            log.error("Не удалось запустить LocalTunnel: {}", e.getMessage());
-            throw new IllegalStateException("Ошибка запуска localtunnel", e);
+            throw new LocalTunnelStartException(e);
         }
     }
 
@@ -125,22 +124,22 @@ public class LocalTunnelServiceImpl implements LocalTunnelService {
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-                log.warn("Ожидание LocalTunnel прервано");
-                break;
-            } catch (Exception ignored) {}
+                throw new LocalTunnelStartException(e);
+            } catch (Exception e) {
+                log.warn("Попытка {}: не удалось получить ответ от LocalTunnel", i + 1);
+            }
 
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-                log.warn("Ожидание LocalTunnel прервано");
-                break;
+                throw new LocalTunnelStartException(e);
             }
         }
 
         if (!success) {
-            log.warn("LocalTunnel не стал доступен после {} попыток. Для дальнейшей работы требуется пройти авторизацию пользователя на публичном URL туннеля.", attempts);
             running.set(false);
+            throw new LocalTunnelStartException(attempts);
         }
     }
 

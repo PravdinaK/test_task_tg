@@ -1,4 +1,4 @@
-package test_task.bot;
+package telegram_webapp_auth.bot;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,12 +11,12 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.webapp.WebAppInfo;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import test_task.service.LocalTunnelService;
+import telegram_webapp_auth.exception.TelegramMessageSendException;
+import telegram_webapp_auth.service.LocalTunnelService;
 
 import java.util.Collections;
 
 @Component
-@Slf4j
 public class TelegramWebAppBot extends TelegramLongPollingBot {
 
     private final LocalTunnelService localTunnelService;
@@ -43,19 +43,17 @@ public class TelegramWebAppBot extends TelegramLongPollingBot {
 
         Message message = update.getMessage();
         String chatId = message.getChatId().toString();
-
         String webAppUrl = localTunnelService.getPublicUrl();
 
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
         sendMessage.setText("""
-            🔽 Нажмите кнопку ниже, чтобы приступить к использованию WebApp.
+            🔽 Нажмите кнопку ниже, чтобы авторизироваться в WebApp.
             """);
 
         WebAppInfo webAppInfo = new WebAppInfo(webAppUrl);
-
         InlineKeyboardButton webAppButton = new InlineKeyboardButton();
-        webAppButton.setText("Перейти в WebApp");
+        webAppButton.setText("Авторизироваться в WebApp");
         webAppButton.setWebApp(webAppInfo);
 
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
@@ -66,7 +64,7 @@ public class TelegramWebAppBot extends TelegramLongPollingBot {
         try {
             execute(sendMessage);
         } catch (TelegramApiException e) {
-            log.error("Ошибка при отправке сообщения: ", e);
+            throw new TelegramMessageSendException(e);
         }
     }
 }

@@ -1,4 +1,4 @@
-package test_task.bot;
+package telegram_webapp_auth.bot;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -7,11 +7,13 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
+import telegram_webapp_auth.exception.TelegramBotRegistrationException;
 
 @Component
 @Slf4j
 @RequiredArgsConstructor
 public class TelegramWebAppBotInitializer {
+
     private final TelegramWebAppBot telegramBot;
 
     @PostConstruct
@@ -21,7 +23,7 @@ public class TelegramWebAppBotInitializer {
             botsApi.registerBot(telegramBot);
             log.info("Telegram WebApp Bot успешно зарегистрирован и запущен!");
         } catch (TelegramApiException e) {
-            log.error("Ошибка при регистрации Telegram WebApp Bot", e);
+            throw new TelegramBotRegistrationException(e);
         }
     }
 }

@@ -1,15 +1,16 @@
-package test_task.service;
+package telegram_webapp_auth.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import test_task.bot.TelegramAuthChecker;
-import test_task.dto.UserViewDto;
-import test_task.exception.InvalidAuthException;
-import test_task.model.User;
-import test_task.repository.UserRepository;
+import telegram_webapp_auth.bot.TelegramAuthChecker;
+import telegram_webapp_auth.dto.UserViewDto;
+import telegram_webapp_auth.exception.InvalidAuthException;
+import telegram_webapp_auth.exception.UserDataProcessingException;
+import telegram_webapp_auth.model.User;
+import telegram_webapp_auth.repository.UserRepository;
 
 import java.util.Map;
 
@@ -27,7 +28,7 @@ public class AuthWebServiceImpl implements AuthWebService {
         log.info("Исходные initData: {}", initDataRaw);
 
         if (!authChecker.isValid(initDataRaw)) {
-            throw new InvalidAuthException("Недействительные данные авторизации Telegram");
+            throw new InvalidAuthException();
         }
 
         try {
@@ -61,8 +62,7 @@ public class AuthWebServiceImpl implements AuthWebService {
             );
 
         } catch (Exception e) {
-            log.error("Ошибка при разборе или сохранении данных пользователя", e);
-            throw new RuntimeException("Не удалось разобрать данные пользователя Telegram", e);
+            throw new UserDataProcessingException(e);
         }
     }
 }

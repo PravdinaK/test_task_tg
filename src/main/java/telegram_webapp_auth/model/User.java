@@ -1,4 +1,4 @@
-package test_task.model;
+package telegram_webapp_auth.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

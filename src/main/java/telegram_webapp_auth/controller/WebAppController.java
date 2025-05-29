@@ -1,4 +1,4 @@
-package test_task.controller;
+package telegram_webapp_auth.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

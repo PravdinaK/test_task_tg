@@ -1,4 +1,4 @@
-package test_task.dto;
+package telegram_webapp_auth.dto;
 
 public record UserViewDto(
         Long id,

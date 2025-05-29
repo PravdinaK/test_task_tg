@@ -1,6 +1,6 @@
-package test_task.service;
+package telegram_webapp_auth.service;
 
-import test_task.dto.UserViewDto;
+import telegram_webapp_auth.dto.UserViewDto;
 
 public interface AuthWebService {
 

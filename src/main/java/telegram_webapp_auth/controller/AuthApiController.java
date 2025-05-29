@@ -1,4 +1,4 @@
-package test_task.controller;
+package telegram_webapp_auth.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import test_task.dto.UserViewDto;
-import test_task.service.AuthWebService;
+import telegram_webapp_auth.dto.UserViewDto;
+import telegram_webapp_auth.service.AuthWebService;
 
 @RestController
 @RequiredArgsConstructor

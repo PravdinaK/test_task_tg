@@ -1,4 +1,4 @@
-package test_task.config;
+package telegram_webapp_auth.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
