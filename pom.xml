@@ -15,7 +15,7 @@
     <groupId>com.tg.bot</groupId>
     <artifactId>test_task</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>test_task</name>
+    <name>telegram_webapp_auth</name>
     <description>Telegram WebApp Authentication with Spring Boot</description>
 
     <properties>
@@ -68,6 +68,14 @@
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots</artifactId>
             <version>${telegrambots.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.tg.auth</groupId>
+            <artifactId>telegram-auth</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/TelegramDataValidation.jar</systemPath>
         </dependency>
 
         <dependency>
