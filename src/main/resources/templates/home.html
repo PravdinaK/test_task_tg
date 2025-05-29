@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <title>Telegram WebApp - Личный кабинет</title>
+    <link href="/css/styles.css" rel="stylesheet" />
+</head>
+<body>
+<div class="container">
+    <h1>Добро пожаловать!</h1>
+
+    <div id="user-info" style="display:none;">
+        <p><strong>ID:</strong> <span id="userId"></span></p>
+        <p><strong>Имя:</strong> <span id="firstName"></span></p>
+        <p><strong>Фамилия:</strong> <span id="lastName"></span></p>
+        <p><strong>Username:</strong> <span id="username"></span></p>
+        <p><strong>Язык:</strong> <span id="languageCode"></span></p>
+        <p><strong>Фото:</strong> <br><img id="photoUrl" style="max-width: 100px; border-radius: 50%;" /></p>
+    </div>
+
+    <div id="error-message" style="color:red; display:none;"></div>
+</div>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const tg = window.Telegram?.WebApp;
+        if (!tg) {
+            showError("Telegram WebApp API не найден");
+            return;
+        }
+
+        const initData = tg.initData;
+        if (!initData) {
+            showError("Нет данных авторизации");
+            return;
+        }
+
+        fetch("/api/auth", {
+            method: "POST",
+            headers: {"Content-Type": "application/x-www-form-urlencoded"},
+            body: "initData=" + encodeURIComponent(initData)
+        })
+            .then(response => {
+                if (!response.ok) throw new Error("Ошибка авторизации");
+                return response.json();
+            })
+            .then(user => {
+                document.getElementById("userId").textContent = user.id || "";
+                document.getElementById("firstName").textContent = user.firstName || "";
+                document.getElementById("lastName").textContent = user.lastName || "";
+                document.getElementById("username").textContent = user.username || "";
+                document.getElementById("languageCode").textContent = user.languageCode || "";
+
+                const photo = document.getElementById("photoUrl");
+                if (user.photoUrl) {
+                    photo.src = user.photoUrl;
+                    photo.style.display = "block";
+                } else {
+                    photo.style.display = "none";
+                }
+
+                document.getElementById("user-info").style.display = "block";
+                document.getElementById("error-message").style.display = "none";
+            })
+            .catch(err => showError(err.message));
+
+        function showError(msg) {
+            const errDiv = document.getElementById("error-message");
+            errDiv.textContent = msg;
+            errDiv.style.display = "block";
+        }
+    });
+</script>
+</body>
+</html>
