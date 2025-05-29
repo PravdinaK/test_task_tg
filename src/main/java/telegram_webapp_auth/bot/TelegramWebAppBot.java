@@ -48,7 +48,7 @@ public class TelegramWebAppBot extends TelegramLongPollingBot {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
         sendMessage.setText("""
-            🔽 Нажмите кнопку ниже, чтобы авторизироваться в WebApp.
+            🔽 Нажмите кнопку ниже, чтобы авторизироваться в WebApp
             """);
 
         WebAppInfo webAppInfo = new WebAppInfo(webAppUrl);
